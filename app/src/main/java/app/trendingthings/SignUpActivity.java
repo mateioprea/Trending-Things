@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 //modified for commit
+//modified 2 for commit still learning git
 /**
  * Created by matei on 4/19/15.
  */

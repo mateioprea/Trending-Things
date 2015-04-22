@@ -2,6 +2,7 @@ package app.trendingthings;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,7 +28,11 @@ public class SignUpActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup);
-        signupSend = (Button) findViewById(R.id.signupButton);
+
+        signupSend = (Button) findViewById(R.id.signupButtonToParse);
+        usernameField = (EditText)findViewById(R.id.loginUsernameInput);
+        passwordField = (EditText)findViewById(R.id.loginUsernameInput);
+
         signupSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -35,22 +40,47 @@ public class SignUpActivity extends Activity {
                 username = usernameField.getText().toString();
                 password = passwordField.getText().toString();
 
-                ParseUser user = new ParseUser();
-                user.setUsername(username);
-                user.setPassword(password);
-
-                user.signUpInBackground(new SignUpCallback() {
-                    public void done(com.parse.ParseException e) {
-                        if (e == null) {
-                            System.out.println("accepted");
-                        } else {
-                            Toast.makeText(getApplicationContext(),
-                                    "There was an error signing up."
-                                    , Toast.LENGTH_LONG).show();
+                if(CheckUserAndPassword(username, password) == true) {
+                    ParseUser user = new ParseUser();
+                    user.setUsername(username);
+                    user.setPassword(password);
+                    user.signUpInBackground(new SignUpCallback() {
+                        public void done(com.parse.ParseException e) {
+                            if (e == null) {
+                                //System.out.println("accepted");
+                                Toast.makeText(getApplicationContext(),"User created",Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(),
+                                        "There was an error signing up."
+                                                + e.getMessage()
+                                        , Toast.LENGTH_LONG).show();
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
         });
+    }
+
+    public boolean CheckUserAndPassword(String user, String pass){
+        String validationMessage = "Input cannot be emtpy: ";
+        int validationsFailed = 0;
+        if(user.isEmpty()){
+            validationsFailed ++;
+            validationMessage += "username ";
+        }
+        if(pass.isEmpty()){
+            validationsFailed ++;
+            if(validationsFailed == 2){
+                validationMessage += ", ";
+            }
+            validationMessage += "password";
+        }
+
+        if(validationsFailed > 0){
+            Toast.makeText(getApplicationContext(),validationMessage,Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
     }
 }

@@ -19,12 +19,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="@string/username"
-            android:id="@+id/loginUsernameText"
+            android:id="@+id/loginUsernameLabel"
             android:layout_gravity="center_horizontal"
             android:textColor="@color/sinch_purple"
             android:textSize="20sp"/>
         <EditText
-            android:id="@+id/loginUsername"
+            android:id="@+id/loginUsernameInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -42,12 +42,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="@string/email"
-            android:id="@+id/loginEmailText"
+            android:id="@+id/loginEmailLabel"
             android:layout_gravity="center_horizontal"
             android:textColor="@color/sinch_purple"
             android:textSize="20sp"/>
         <EditText
-            android:id="@+id/loginEmail"
+            android:id="@+id/loginEmailInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -65,12 +65,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="@string/password"
-            android:id="@+id/loginPasswordText"
+            android:id="@+id/loginPasswordLabel"
             android:layout_gravity="center_horizontal"
             android:textColor="@color/sinch_purple"
             android:textSize="20sp"/>
         <EditText
-            android:id="@+id/loginPassword"
+            android:id="@+id/loginPasswordInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -92,13 +92,7 @@
             android:layout_gravity="center">
 
             <Button
-                android:id="@+id/loginButton"
-                android:layout_width="177dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_login"/>
-
-            <Button
-                android:id="@+id/signupButton"
+                android:id="@+id/signupButtonToParse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_signup"/>

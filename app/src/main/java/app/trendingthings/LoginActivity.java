@@ -27,15 +27,16 @@ public class LoginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
 
         intent = new Intent(getApplicationContext(), ListArticlesActivity.class);
 
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        if (currentUser != null) {
-            startActivity(intent);
-        }
+        //ParseUser currentUser = ParseUser.getCurrentUser();
+        //if (currentUser != null) {
+        //    startActivity(intent);
+        //}
 
-        setContentView(R.layout.activity_login);
+
 
         loginButton = (Button) findViewById(R.id.loginButton);
         signUpButton = (Button) findViewById(R.id.signupButton);

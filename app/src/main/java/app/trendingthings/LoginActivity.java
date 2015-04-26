@@ -21,7 +21,6 @@ public class LoginActivity extends Activity {
     private EditText passwordField;
     private String username;
     private String password;
-    private Intent intent;
     private Intent signupIntent;
 
     @Override
@@ -29,47 +28,64 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        intent = new Intent(getApplicationContext(), ListArticlesActivity.class);
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        //User is logged in => go to articles activity
+        if (currentUser != null) {
+            Toast.makeText(getApplicationContext(),currentUser.getUsername(),Toast.LENGTH_SHORT).show();
+            //save currentUser to Application for user in future activities without query
+            SaveUserToApp(currentUser);
+            GoToArticles();
+        }
+        //User must login or signUp
+        else {
+            loginButton = (Button) findViewById(R.id.loginButton);
+            signUpButton = (Button) findViewById(R.id.signupButton);
+            usernameField = (EditText) findViewById(R.id.loginUsername);
+            passwordField = (EditText) findViewById(R.id.loginPassword);
 
-        //ParseUser currentUser = ParseUser.getCurrentUser();
-        //if (currentUser != null) {
-        //    startActivity(intent);
-        //}
+            loginButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    username = usernameField.getText().toString();
+                    password = passwordField.getText().toString();
 
-
-
-        loginButton = (Button) findViewById(R.id.loginButton);
-        signUpButton = (Button) findViewById(R.id.signupButton);
-        usernameField = (EditText) findViewById(R.id.loginUsername);
-        passwordField = (EditText) findViewById(R.id.loginPassword);
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                username = usernameField.getText().toString();
-                password = passwordField.getText().toString();
-
-                ParseUser.logInInBackground(username, password, new LogInCallback() {
-                    public void done(ParseUser user, com.parse.ParseException e) {
-                        if (user != null) {
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(getApplicationContext(),
-                                    "Wrong username/password combo",
-                                    Toast.LENGTH_LONG).show();
+                    ParseUser.logInInBackground(username, password, new LogInCallback() {
+                        public void done(ParseUser user, com.parse.ParseException e) {
+                            if (user != null) {
+                                //TODO check if getCurrentUser is required or can use user returned by login
+                                ParseUser currentUser = ParseUser.getCurrentUser();
+                                //save currentUser to Application for user in future activities without query
+                                SaveUserToApp(currentUser);
+                                GoToArticles();
+                            } else {
+                                Toast.makeText(getApplicationContext(),
+                                        "Wrong username/password combo",
+                                        Toast.LENGTH_LONG).show();
+                            }
                         }
-                    }
-                });
-            }
-        });
+                    });
+                }
+            });
 
-        signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signupIntent = new Intent(getApplicationContext(), SignUpActivity.class);
-                startActivity(signupIntent);
-            }
-        });
+            signUpButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    signupIntent = new Intent(getApplicationContext(), SignUpActivity.class);
+                    startActivity(signupIntent);
+                }
+            });
+        }
+    }
+
+    //save currentUser to Application for user in future activities without query
+    private void SaveUserToApp(ParseUser currentUser){
+        MyApplication my = (MyApplication)getApplication();
+        my.currentUser = currentUser;
+    }
+
+    private void GoToArticles(){
+        Intent goToListArticles = new Intent(getApplicationContext(), ListArticlesActivity.class);
+        startActivity(goToListArticles);
     }
 
     @Override

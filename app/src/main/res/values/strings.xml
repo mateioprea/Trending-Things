@@ -10,4 +10,5 @@
     <string name="email">EMAIL</string>
     <string name="password">PASSWORD</string>
     <string name="SignOut">SignOut</string>
+    <string name="TakePhoto">Take a photo</string>
 </resources>

@@ -26,6 +26,32 @@
                 android:gravity="center"
                 android:layout_gravity="center" />
         </LinearLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:layout_weight="0.83" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/TakePhoto"
+            android:id="@+id/TakePhotoButton" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save Test Object"
+            android:id="@+id/SaveObjectButton"
+            android:layout_gravity="center_horizontal" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Take last picture from server"
+            android:id="@+id/TakeFromServer"
+            android:layout_gravity="center_horizontal" />
     </LinearLayout>
 
 </LinearLayout>

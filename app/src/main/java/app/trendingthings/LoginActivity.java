@@ -34,7 +34,7 @@ public class LoginActivity extends Activity {
             Toast.makeText(getApplicationContext(),currentUser.getUsername(),Toast.LENGTH_SHORT).show();
             //save currentUser to Application for user in future activities without query
             SaveUserToApp(currentUser);
-            GoToArticles();
+            GoToChoose();
         }
         //User must login or signUp
         else {
@@ -56,7 +56,7 @@ public class LoginActivity extends Activity {
                                 ParseUser currentUser = ParseUser.getCurrentUser();
                                 //save currentUser to Application for user in future activities without query
                                 SaveUserToApp(currentUser);
-                                GoToArticles();
+                                GoToChoose();
                             } else {
                                 Toast.makeText(getApplicationContext(),
                                         "Wrong username/password combo",
@@ -83,9 +83,9 @@ public class LoginActivity extends Activity {
         my.currentUser = currentUser;
     }
 
-    private void GoToArticles(){
-        Intent goToListArticles = new Intent(getApplicationContext(), ListArticlesActivity.class);
-        startActivity(goToListArticles);
+    private void GoToChoose(){
+        Intent goToChoose = new Intent(getApplicationContext(), ChooseAction.class);
+        startActivity(goToChoose);
     }
 
     @Override

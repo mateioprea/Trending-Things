@@ -12,8 +12,12 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,23 +34,28 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
  * Created by matei on 4/19/15.
  */
+//Grup discutie cadouri
+
 public class ListArticlesActivity extends Activity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private String mCurrentPhotoPath;
     private Bitmap picBitmap;
+    private List<ParseObject> giftCategories;
+    private Spinner spinnerCategory;
 
     public class TakeFromServer implements View.OnClickListener
     {
         @Override
         public void onClick(View v) {
-            ParseQuery<ParseObject> getLastPicture = ParseQuery.getQuery("TestObject1");
+            ParseQuery<ParseObject> getLastPicture = ParseQuery.getQuery(Constants.TestObject);
             getLastPicture.orderByDescending("createdAt");
             getLastPicture.setLimit(1);
             getLastPicture.findInBackground(new FindCallback<ParseObject>() {
@@ -84,10 +93,33 @@ public class ListArticlesActivity extends Activity {
     {
         @Override
         public void onClick(View v) {
-            ParseObject toSave = new ParseObject("TestObject1");
+            ParseObject toSave = new ParseObject(Constants.TestObject);
             ParseUser currentUser = ((MyApplication)getApplication()).currentUser;
+            //salvare date pe gift
             toSave.put("User",currentUser.getUsername());
+
             toSave.put("Message","Test salvare obiect");
+
+            EditText txt = (EditText)findViewById(R.id.GiftNameInput);
+            toSave.put(Constants.GiftName, txt.getText().toString());
+
+            txt = (EditText)findViewById(R.id.GiftDescriptionInput);
+            toSave.put(Constants.GiftDescription, txt.getText().toString());
+
+            int categoryId = GetCategoryId(spinnerCategory.getSelectedItem().toString());
+
+            if(categoryId < 0){
+                return;
+            }
+
+            toSave.put(Constants.CategoryId, categoryId);
+
+            Switch switchSex = (Switch)findViewById(R.id.switch1);
+            if(switchSex.isChecked()){
+                toSave.put(Constants.GiftPersonSex, switchSex.getTextOn());
+            }else {
+                toSave.put(Constants.GiftPersonSex, switchSex.getTextOff());
+            }
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             picBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
@@ -152,10 +184,52 @@ public class ListArticlesActivity extends Activity {
         }
     }
 
+    private void SetCategoriesSpinnerValues(List<ParseObject> values){
+
+        List<String> stringValues = new ArrayList<String>();
+        for(int i = 0; i < values.size(); i++){
+            stringValues.add(values.get(i).get(Constants.CategoryDescription).toString());
+        }
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, stringValues);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCategory.setAdapter(dataAdapter);
+    }
+
+    private void GetGiftCategories(){
+        ParseQuery<ParseObject> getCategories = ParseQuery.getQuery(Constants.Categories);
+        getCategories.orderByAscending(Constants.CategoryId);
+        getCategories.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> parseObjects, ParseException e) {
+                if(e == null){
+                    Toast.makeText(getApplicationContext(),parseObjects.size()+ " ",Toast.LENGTH_LONG).show();
+                    giftCategories = parseObjects;
+                    SetCategoriesSpinnerValues(giftCategories);
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),e.toString(),Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    private int GetCategoryId(String selectedCategory){
+        for(int i = 0; i < giftCategories.size(); i++){
+            if(giftCategories.get(i).get(Constants.CategoryDescription).toString().equals(selectedCategory))
+                return Integer.parseInt(giftCategories.get(i).get(Constants.CategoryId).toString());
+        }
+        return -1;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_articles);
+
+        spinnerCategory = (Spinner)findViewById(R.id.GiftCategorySpinnerInput);
+
+        GetGiftCategories();
 
         MyApplication myApp = (MyApplication)getApplication();
         ParseUser currentUser = myApp.currentUser;

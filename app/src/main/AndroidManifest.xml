@@ -83,7 +83,7 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-<!--                   IMPORTANT: Change "com.parse.starter" to match your app's package name. -->
+                <!-- IMPORTANT: Change "com.parse.starter" to match your app's package name. -->
                 <category android:name="app.trendingthings" />
             </intent-filter>
         </receiver>
@@ -91,6 +91,14 @@
         <activity
             android:name=".ChooseAction"
             android:label="@string/title_activity_choose_action" >
+        </activity>
+        <activity
+            android:name=".MyGroups"
+            android:label="@string/title_activity_my_groups" >
+        </activity>
+        <activity
+            android:name=".NewGroup"
+            android:label="@string/title_activity_new_group" >
         </activity>
     </application>
 

@@ -13,6 +13,14 @@ import android.widget.Toast;
 
 public class ChooseAction extends Activity {
 
+    public class GroupsClick implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            Intent GoToGroups = new Intent(getApplicationContext(), MyGroups.class);
+            startActivity(GoToGroups);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,12 +48,7 @@ public class ChooseAction extends Activity {
             }
         });
 
-        ((Button)findViewById(R.id.buttonCreateGroup)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"TODO create group for birthday",Toast.LENGTH_LONG).show();
-            }
-        });
+        ((Button)findViewById(R.id.buttonCreateGroup)).setOnClickListener(new GroupsClick());
 
         ((Button)findViewById(R.id.buttonSuggest)).setOnClickListener(new View.OnClickListener() {
             @Override

@@ -18,6 +18,12 @@
     <string name="title_activity_choose_action">ChooseAction</string>
     <string name="AddGift">Adauga un cadou gasit</string>
     <string name="SearchGift">Cauta un cadou</string>
-    <string name="CreateGroup">Creaza un grup pentru o zi de nastere</string>
+    <string name="ViewGropus">Grupuri</string>
     <string name="Suggest">Sugereaza o categorie de cadouri</string>
+    <string name="title_activity_my_groups">MyGroups</string>
+    <string name="CreateNewGroup">Creaza un nou group</string>
+    <string name="title_activity_new_group">NewGroup</string>
+    <string name="GroupName">Denumire</string>
+    <string name="GroupDescription">Descriere</string>
+    <string name="GroupDate">Data party</string>
 </resources>

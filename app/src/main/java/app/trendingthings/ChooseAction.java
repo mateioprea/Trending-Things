@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 public class ChooseAction extends Activity {
 
-    public class GroupsClick implements View.OnClickListener{
+    class GroupsClick implements View.OnClickListener{
         @Override
         public void onClick(View v) {
             Intent GoToGroups = new Intent(getApplicationContext(), MyGroups.class);
@@ -21,25 +21,28 @@ public class ChooseAction extends Activity {
         }
     }
 
+    class SuggestClick implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            Intent GoToSuggest = new Intent(getApplicationContext(), SugestCategory.class);
+            startActivity(GoToSuggest);
+        }
+    }
+
+    class AddGiftClick implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            Intent goToListArticles = new Intent(getApplicationContext(), ListArticlesActivity.class);
+            startActivity(goToListArticles);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_action);
-    }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_choose_action, menu);
-
-        ((Button)findViewById(R.id.buttonAddGift)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent goToListArticles = new Intent(getApplicationContext(), ListArticlesActivity.class);
-                startActivity(goToListArticles);
-            }
-        });
+        ((Button)findViewById(R.id.buttonAddGift)).setOnClickListener(new AddGiftClick());
 
         ((Button)findViewById(R.id.buttonSearchGift)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,14 +53,14 @@ public class ChooseAction extends Activity {
 
         ((Button)findViewById(R.id.buttonCreateGroup)).setOnClickListener(new GroupsClick());
 
-        ((Button)findViewById(R.id.buttonSuggest)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"TODO suggest categories of gifts",Toast.LENGTH_LONG).show();
-            }
-        });
+        ((Button)findViewById(R.id.buttonSuggest)).setOnClickListener(new SuggestClick());
+    }
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_choose_action, menu);
         return true;
     }
 

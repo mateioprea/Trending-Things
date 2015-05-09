@@ -12,14 +12,14 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/GroupName"
         android:id="@+id/textView5"
-        android:layout_above="@+id/editText2"
+        android:layout_above="@+id/newGroupDescription"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
+        android:id="@+id/newGroupName"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/textView5"
         android:layout_alignParentRight="true"
@@ -31,19 +31,19 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/GroupDescription"
         android:id="@+id/textView6"
-        android:layout_alignBottom="@+id/editText2"
+        android:layout_alignBottom="@+id/newGroupDescription"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText2"
-        android:layout_below="@+id/editText"
-        android:layout_alignLeft="@+id/editText"
-        android:layout_alignStart="@+id/editText"
-        android:layout_alignRight="@+id/editText"
-        android:layout_alignEnd="@+id/editText" />
+        android:id="@+id/newGroupDescription"
+        android:layout_below="@+id/newGroupName"
+        android:layout_alignLeft="@+id/newGroupName"
+        android:layout_alignStart="@+id/newGroupName"
+        android:layout_alignRight="@+id/newGroupName"
+        android:layout_alignEnd="@+id/newGroupName" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -51,9 +51,12 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/GroupDate"
         android:id="@+id/textView7"
-        android:layout_centerVertical="true"
-        android:layout_toStartOf="@+id/datePicker"
-        android:layout_toLeftOf="@+id/datePicker" />
+        android:layout_below="@+id/textView6"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="92dp"
+        android:layout_toLeftOf="@+id/newGroupDescription"
+        android:layout_toStartOf="@+id/newGroupDescription" />
 
     <DatePicker
         android:layout_width="wrap_content"
@@ -62,4 +65,26 @@
         android:layout_below="@+id/textView6"
         android:layout_toRightOf="@+id/textView6"
         android:layout_toEndOf="@+id/textView6" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/CreateNewGroupButton"
+        android:id="@+id/buttonSaveNewGroup"
+        android:layout_below="@+id/datePicker"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/CancelNewGroupButton"
+        android:id="@+id/buttonCancelNewGroup"
+        android:layout_below="@+id/buttonSaveNewGroup"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/datePicker"
+        android:layout_alignEnd="@+id/datePicker" />
 </RelativeLayout>

@@ -26,4 +26,10 @@
     <string name="GroupName">Denumire</string>
     <string name="GroupDescription">Descriere</string>
     <string name="GroupDate">Data party</string>
+    <string name="CreateNewGroupButton">Creaza grup</string>
+    <string name="CancelNewGroupButton">Anuleaza</string>
+    <string name="title_activity_sugest_category">SugestCategory</string>
+    <string name="SuggestCategoryLabel">Denumire categorie noua</string>
+    <string name="SaveSuggestedCategory">Trimite sugestia</string>
+    <string name="CancelSuggestedCategory">Anuleaza</string>
 </resources>

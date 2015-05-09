@@ -8,9 +8,84 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.SaveCallback;
+
+import java.util.Calendar;
+import java.util.Date;
 
 
 public class NewGroup extends Activity {
+
+    class SaveGroupButtonClick implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            TextView txt;
+            String value;
+            ParseObject newGroup = new ParseObject(Constants.GroupObject);
+
+            txt = (EditText)findViewById(R.id.newGroupName);
+            value = txt.getText().toString();
+            if(value.isEmpty()){
+                Toast.makeText(getApplicationContext(),"Completati numele grupului!",Toast.LENGTH_SHORT).show();
+                return;
+            }
+            else{
+                newGroup.put(Constants.GroupName,value);
+            }
+
+            txt = (EditText)findViewById(R.id.newGroupDescription);
+            value = txt.getText().toString();
+            if(value.isEmpty()){
+                Toast.makeText(getApplicationContext(),"Completati descrierea grupului!",Toast.LENGTH_SHORT).show();
+                return;
+            }
+            else{
+                newGroup.put(Constants.GroupDescription,value);
+            }
+
+            DatePicker datePick;
+            datePick = (DatePicker)findViewById(R.id.datePicker);
+
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.YEAR, datePick.getYear());
+            cal.set(Calendar.MONTH, datePick.getMonth());
+            cal.set(Calendar.DAY_OF_MONTH, datePick.getDayOfMonth());
+
+            Date chooseDate;
+            chooseDate = cal.getTime();
+
+            newGroup.put(Constants.GroupDate, chooseDate);
+
+            newGroup.saveInBackground(new SaveCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if(e == null){
+                        Toast.makeText(getApplicationContext(),"Grup salvat cu success",Toast.LENGTH_SHORT).show();
+                        setResult(RESULT_OK);
+                        finish();
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(),"Eroare " + e.toString(),Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+        }
+    }
+
+    class CancelButtonClick implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            setResult(RESULT_CANCELED);
+            finish();
+        }
+    }
 
 
 
@@ -19,6 +94,9 @@ public class NewGroup extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_group);
 
+        ((Button)findViewById(R.id.buttonSaveNewGroup)).setOnClickListener(new SaveGroupButtonClick());
+
+        ((Button)findViewById(R.id.buttonCancelNewGroup)).setOnClickListener(new CancelButtonClick());
 
     }
 

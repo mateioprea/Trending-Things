@@ -100,6 +100,10 @@
             android:name=".NewGroup"
             android:label="@string/title_activity_new_group" >
         </activity>
+        <activity
+            android:name=".SugestCategory"
+            android:label="@string/title_activity_sugest_category" >
+        </activity>
     </application>
 
 </manifest>

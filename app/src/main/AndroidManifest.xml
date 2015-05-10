@@ -104,6 +104,10 @@
             android:name=".SugestCategory"
             android:label="@string/title_activity_sugest_category" >
         </activity>
+        <activity
+            android:name=".GroupView"
+            android:label="@string/title_activity_group_view" >
+        </activity>
     </application>
 
 </manifest>

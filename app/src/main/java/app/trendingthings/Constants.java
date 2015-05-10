@@ -22,11 +22,21 @@ public interface Constants {
     public final String GroupName = "Name";
     public final String GroupDescription = "Description";
     public final String GroupDate = "Date";
+    public final String GropuRelationComments = "Comments";
+    //
+
+    //GroupComment
+    public final String CommentObject = "CommentInGroup"; //object DB
+    public final String CommentContent = "Content";
     //
 
     //Suggested Category
     public final String SuggestedCategoryObject = "SuggestedCategory"; //obiect DB
     public final String SuggestedCategoryName = "Name";
+    //
+
+    //Intent Data
+    public final String GroupToView = "GroupToViewOBjectId";
     //
     public final String TestObject = "TestObject1";
 }

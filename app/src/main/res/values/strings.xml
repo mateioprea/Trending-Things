@@ -32,4 +32,8 @@
     <string name="SuggestCategoryLabel">Denumire categorie noua</string>
     <string name="SaveSuggestedCategory">Trimite sugestia</string>
     <string name="CancelSuggestedCategory">Anuleaza</string>
+    <string name="title_activity_group_view">GroupView</string>
+    <string name="GroupViewAddUserInGroup">Adauga utilizator</string>
+    <string name="GroupViewAddComment">Adauga un comentariu</string>
+    <string name="GrouViewAddCommentButton">Adauga</string>
 </resources>

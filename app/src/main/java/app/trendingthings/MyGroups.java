@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -25,6 +26,7 @@ import java.util.List;
 public class MyGroups extends Activity {
 
     private final int ReqCode = 404;
+    private List<ParseObject> myGroups;
 
     class NewGroupClick implements View.OnClickListener{
         @Override
@@ -33,21 +35,6 @@ public class MyGroups extends Activity {
             startActivityForResult(goToNewCreateNewGroup,ReqCode);
         }
     }
-
-    String[] userGroups = new String[]{
-            "Grup 1",
-            "Grup 12",
-            "Grup 13",
-            "Grup 14",
-            "Grup 15",
-            "Grup 16",
-            "Grup 17",
-            "Grup 18",
-            "Grup 19",
-            "Grup 10",
-            "Grup 11",
-            "Grup 12"
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +47,7 @@ public class MyGroups extends Activity {
     }
 
     private void SetValuesOnListView(List<ParseObject> values){
+        myGroups = values;
         ArrayList<String> userGroups = new ArrayList<>();
         for(int i = 0; i < values.size(); i++){
             userGroups.add((values.get(i)).get(Constants.GroupName).toString() + "\n" +
@@ -69,6 +57,16 @@ public class MyGroups extends Activity {
         ListView groups = (ListView)findViewById(R.id.listViewGroups);
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, userGroups);
         groups.setAdapter(adapter);
+
+        groups.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getApplicationContext(),myGroups.get(position).getString(Constants.GroupName),Toast.LENGTH_LONG).show();
+                Intent goToGroupView = new Intent(getApplicationContext(),GroupView.class);
+                goToGroupView.putExtra(Constants.GroupToView, myGroups.get(position).getObjectId());
+                startActivity(goToGroupView);
+            }
+        });
     }
 
     private void PopulateGroupList(){

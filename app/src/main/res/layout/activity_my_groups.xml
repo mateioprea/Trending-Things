@@ -19,6 +19,12 @@
             android:text="@string/CreateNewGroup"
             android:id="@+id/buttonCreateNew" />
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="New Button"
+            android:id="@+id/viewInvitesButton" />
+
         <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

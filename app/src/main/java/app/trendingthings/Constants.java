@@ -19,6 +19,7 @@ public interface Constants {
 
     //Group
     public final String GroupObject = "BirthdayGroup"; //obiect DB
+    public final String GroupId = "objectId";
     public final String GroupName = "Name";
     public final String GroupDescription = "Description";
     public final String GroupDate = "Date";
@@ -35,8 +36,19 @@ public interface Constants {
     public final String SuggestedCategoryName = "Name";
     //
 
+    //Invite to Group
+    public final String InviteObject = "Invite";
+    public final String InviteGroupId = "GroupId";
+    public final String InviteUsername = "Username";
+    public final String InviteByUser = "InvitedByUser";
+    public final String InviteGroupName = "GroupName";
+    //
+
     //Intent Data
     public final String GroupToView = "GroupToViewOBjectId";
     //
+
+    public final String UserGroups = "InGroups";
+
     public final String TestObject = "TestObject1";
 }

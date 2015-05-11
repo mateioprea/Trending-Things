@@ -29,6 +29,7 @@ import java.util.List;
 public class GroupView extends Activity {
 
     private ParseObject currentGroup;
+    private String objId;
 
     private void LoadComments(){
         ParseRelation<ParseObject> comments =  currentGroup.getRelation(Constants.GropuRelationComments);
@@ -123,12 +124,21 @@ public class GroupView extends Activity {
 
         Intent startIntent = getIntent();
         if(startIntent != null){
-            String objId = startIntent.getStringExtra(Constants.GroupToView);
+            objId = startIntent.getStringExtra(Constants.GroupToView);
             LoadGroup(objId);
             Toast.makeText(getApplicationContext(),objId,Toast.LENGTH_LONG).show();
         }
 
         ((Button)findViewById(R.id.GroupViewAddCommentButton)).setOnClickListener(new AddCommentButtonClick());
+
+        ((Button)findViewById(R.id.GroupViewAddNewUserButton)).setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent GoToAddUser = new Intent(getApplicationContext(),AddUserToGroup.class);
+                GoToAddUser.putExtra(Constants.GroupId, objId);
+                startActivity(GoToAddUser);
+            }
+        });
     }
 
 

@@ -36,4 +36,8 @@
     <string name="GroupViewAddUserInGroup">Adauga utilizator</string>
     <string name="GroupViewAddComment">Adauga un comentariu</string>
     <string name="GrouViewAddCommentButton">Adauga</string>
+    <string name="title_activity_add_user_to_group">AddUserToGroup</string>
+    <string name="SearchUserName">Utilizator cautat</string>
+    <string name="SearchUserNameButton">Cauta utilizator</string>
+    <string name="title_activity_view_invites">ViewInvites</string>
 </resources>

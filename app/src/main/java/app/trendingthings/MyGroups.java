@@ -15,9 +15,12 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +30,15 @@ public class MyGroups extends Activity {
 
     private final int ReqCode = 404;
     private List<ParseObject> myGroups;
+    private ParseUser currentUser;
+
+    class ViewInvitesClick implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            Intent goToViewInvites = new Intent(getApplicationContext(),ViewInvites.class);
+            startActivity(goToViewInvites);
+        }
+    }
 
     class NewGroupClick implements View.OnClickListener{
         @Override
@@ -41,9 +53,12 @@ public class MyGroups extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_groups);
 
-        ((Button)findViewById(R.id.buttonCreateNew)).setOnClickListener(new NewGroupClick());
+        currentUser = ((MyApplication)getApplication()).currentUser;
 
+        ((Button)findViewById(R.id.buttonCreateNew)).setOnClickListener(new NewGroupClick());
+        ((Button)findViewById(R.id.viewInvitesButton)).setOnClickListener(new ViewInvitesClick());
         PopulateGroupList();
+        CheckForInvites();
     }
 
     private void SetValuesOnListView(List<ParseObject> values){
@@ -61,15 +76,57 @@ public class MyGroups extends Activity {
         groups.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(),myGroups.get(position).getString(Constants.GroupName),Toast.LENGTH_LONG).show();
-                Intent goToGroupView = new Intent(getApplicationContext(),GroupView.class);
+                Toast.makeText(getApplicationContext(), myGroups.get(position).getString(Constants.GroupName), Toast.LENGTH_LONG).show();
+                Intent goToGroupView = new Intent(getApplicationContext(), GroupView.class);
                 goToGroupView.putExtra(Constants.GroupToView, myGroups.get(position).getObjectId());
                 startActivity(goToGroupView);
             }
         });
     }
 
+    private void CheckForInvites(){
+        ParseUser current = ((MyApplication)getApplication()).currentUser;
+        ParseQuery countInvites = new ParseQuery(Constants.InviteObject);
+        countInvites.whereContains(Constants.InviteUsername, current.getUsername());
+        int x = 0;
+        try {
+            x = countInvites.count();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        String buttonText;
+        if( x == 0){
+            buttonText = "Nu aveti invitatii active";
+        }
+        else{
+            buttonText = "Aveti " + x + " invitatii active";
+        }
+
+
+        ((Button)findViewById(R.id.viewInvitesButton)).setText(buttonText);
+    }
+
     private void PopulateGroupList(){
+        //broken code :-??
+        /*try {
+            currentUser.fetch();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        ParseRelation<ParseObject> userGroups = currentUser.getRelation(Constants.UserGroups);
+        userGroups.getQuery().findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> parseObjects, ParseException e) {
+                if(e == null){
+                    Toast.makeText(getApplicationContext(),parseObjects.size() + "", Toast.LENGTH_SHORT).show();
+                    //SetValuesOnListView(parseObjects);
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"E " + e.toString(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+*/
         ParseQuery<ParseObject> getGroups = ParseQuery.getQuery(Constants.GroupObject);
         getGroups.orderByDescending(Constants.GroupDate);
         getGroups.findInBackground(new FindCallback<ParseObject>() {

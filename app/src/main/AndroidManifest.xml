@@ -108,6 +108,14 @@
             android:name=".GroupView"
             android:label="@string/title_activity_group_view" >
         </activity>
+        <activity
+            android:name=".AddUserToGroup"
+            android:label="@string/title_activity_add_user_to_group" >
+        </activity>
+        <activity
+            android:name=".ViewInvites"
+            android:label="@string/title_activity_view_invites" >
+        </activity>
     </application>
 
 </manifest>

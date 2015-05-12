@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseBroadcastReceiver;
@@ -29,6 +30,7 @@ public class ViewInvites extends Activity {
 
     private ParseUser currentUser;
     private List<ParseObject> InvitesFromServer;
+    private boolean debug;
 
     private void LoadInvites(){
         ParseQuery getInvites = new ParseQuery(Constants.InviteObject);
@@ -37,7 +39,9 @@ public class ViewInvites extends Activity {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 if(e == null){
-                    Toast.makeText(getApplicationContext(),"From server: " + parseObjects.size(), Toast.LENGTH_SHORT).show();
+                    if(debug) {
+                        Toast.makeText(getApplicationContext(), "From server: " + parseObjects.size(), Toast.LENGTH_SHORT).show();
+                    }
                     InvitesFromServer = parseObjects;
                     ArrayList<String> invites = new ArrayList<String>();
                     ParseObject current;
@@ -53,30 +57,27 @@ public class ViewInvites extends Activity {
                     ((ListView)findViewById(R.id.viewInvitesListView)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            ParseObject invite = InvitesFromServer.get(position);
-                            final ParseRelation<ParseObject> userGroups = currentUser.getRelation(Constants.UserGroups);
-                            ParseQuery getGroup = new ParseQuery(Constants.GroupObject);
-                            getGroup.getInBackground(invite.get(Constants.InviteGroupId).toString(), new GetCallback<ParseObject>() {
+                            final ParseObject invite = InvitesFromServer.get(position);
+                            currentUser.addUnique(Constants.UserGroups, invite.get(Constants.InviteGroupName).toString());
+                            currentUser.saveInBackground(new SaveCallback() {
                                 @Override
-                                public void done(ParseObject parseObject, ParseException e) {
-                                    Toast.makeText(getApplicationContext(),"Adus grup de pe server", Toast.LENGTH_LONG).show();
-                                    userGroups.add(parseObject);
-                                    parseObject.saveInBackground(new SaveCallback() {
-                                        @Override
-                                        public void done(ParseException e) {
-                                            if(e == null){
-                                                Toast.makeText(getApplicationContext(),"salvare reusita",Toast.LENGTH_LONG).show();
+                                public void done(ParseException e) {
+                                    if(e == null){
+                                        Toast.makeText(getApplicationContext(),"Invitatie acceptata",Toast.LENGTH_LONG).show();
+                                        invite.deleteInBackground(new DeleteCallback() {
+                                            @Override
+                                            public void done(ParseException e) {
+                                                LoadInvites();
                                             }
-                                            else{
-                                                Toast.makeText(getApplicationContext(),"Eroare: " + e.toString(), Toast.LENGTH_LONG).show();
-                                            }
-                                        }
-                                    });
+                                        });
+                                    }
+                                    else{
+                                        Toast.makeText(getApplicationContext(), "Eroare: " + e.toString(), Toast.LENGTH_LONG).show();
+                                    }
                                 }
                             });
                         }
                     });
-
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "Eroare " + e.toString(), Toast.LENGTH_LONG).show();
@@ -91,6 +92,7 @@ public class ViewInvites extends Activity {
         setContentView(R.layout.activity_view_invites);
 
         currentUser = ((MyApplication)getApplication()).currentUser;
+        debug = ((MyApplication)getApplication()).debug;
         LoadInvites();
     }
 

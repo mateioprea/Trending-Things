@@ -23,6 +23,8 @@ import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -31,12 +33,16 @@ public class MyGroups extends Activity {
     private final int ReqCode = 404;
     private List<ParseObject> myGroups;
     private ParseUser currentUser;
+    private boolean debug;
+    private boolean goToInvites = true;
 
     class ViewInvitesClick implements View.OnClickListener{
         @Override
         public void onClick(View v) {
-            Intent goToViewInvites = new Intent(getApplicationContext(),ViewInvites.class);
-            startActivity(goToViewInvites);
+            if(goToInvites) {
+                Intent goToViewInvites = new Intent(getApplicationContext(), ViewInvites.class);
+                startActivity(goToViewInvites);
+            }
         }
     }
 
@@ -54,6 +60,7 @@ public class MyGroups extends Activity {
         setContentView(R.layout.activity_my_groups);
 
         currentUser = ((MyApplication)getApplication()).currentUser;
+        debug = ((MyApplication)getApplication()).debug;
 
         ((Button)findViewById(R.id.buttonCreateNew)).setOnClickListener(new NewGroupClick());
         ((Button)findViewById(R.id.viewInvitesButton)).setOnClickListener(new ViewInvitesClick());
@@ -63,10 +70,12 @@ public class MyGroups extends Activity {
 
     private void SetValuesOnListView(List<ParseObject> values){
         myGroups = values;
+        Date current = Calendar.getInstance().getTime();
         ArrayList<String> userGroups = new ArrayList<>();
         for(int i = 0; i < values.size(); i++){
-            userGroups.add((values.get(i)).get(Constants.GroupName).toString() + "\n" +
-                    values.get(i).get(Constants.GroupDate).toString());
+            userGroups.add((values.get(i)).get(Constants.GroupName).toString() + "\n" + "\t" +
+                    (((Date)values.get(i).get(Constants.GroupDate)).getTime() - current.getTime())/(24 * 60 * 60 * 1000) +
+            " zile ramase");
         }
 
         ListView groups = (ListView)findViewById(R.id.listViewGroups);
@@ -97,6 +106,7 @@ public class MyGroups extends Activity {
         String buttonText;
         if( x == 0){
             buttonText = "Nu aveti invitatii active";
+            goToInvites = false;
         }
         else{
             buttonText = "Aveti " + x + " invitatii active";
@@ -107,28 +117,19 @@ public class MyGroups extends Activity {
     }
 
     private void PopulateGroupList(){
-        //broken code :-??
-        /*try {
-            currentUser.fetch();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        ParseRelation<ParseObject> userGroups = currentUser.getRelation(Constants.UserGroups);
-        userGroups.getQuery().findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> parseObjects, ParseException e) {
-                if(e == null){
-                    Toast.makeText(getApplicationContext(),parseObjects.size() + "", Toast.LENGTH_SHORT).show();
-                    //SetValuesOnListView(parseObjects);
-                }
-                else{
-                    Toast.makeText(getApplicationContext(),"E " + e.toString(), Toast.LENGTH_LONG).show();
-                }
+        List<ParseObject> groupsFromUser = currentUser.getList(Constants.UserGroups);
+        if(groupsFromUser != null) {
+            if(debug) {
+                Toast.makeText(getApplicationContext(), "Grupuri de la user " + groupsFromUser.size(), Toast.LENGTH_LONG).show();
             }
-        });
-*/
+        }
+        else{
+            groupsFromUser = new ArrayList<ParseObject>();
+        }
+
         ParseQuery<ParseObject> getGroups = ParseQuery.getQuery(Constants.GroupObject);
-        getGroups.orderByDescending(Constants.GroupDate);
+        getGroups.orderByAscending(Constants.GroupDate);
+        getGroups.whereContainedIn(Constants.GroupName,groupsFromUser);
         getGroups.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
@@ -143,14 +144,25 @@ public class MyGroups extends Activity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        PopulateGroupList();
+        CheckForInvites();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK){
             PopulateGroupList();
-            Toast.makeText(getApplicationContext(),"Grup creat" + requestCode, Toast.LENGTH_LONG).show();
+            if(debug) {
+                Toast.makeText(getApplicationContext(), "Grup creat" + requestCode, Toast.LENGTH_LONG).show();
+            }
         }
         else{
-            Toast.makeText(getApplicationContext(),"Grup anulat" + requestCode, Toast.LENGTH_LONG).show();
+            if(debug) {
+                Toast.makeText(getApplicationContext(), "Grup anulat" + requestCode, Toast.LENGTH_LONG).show();
+            }
         }
     }
 

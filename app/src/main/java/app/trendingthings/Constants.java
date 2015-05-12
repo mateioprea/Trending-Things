@@ -48,7 +48,8 @@ public interface Constants {
     public final String GroupToView = "GroupToViewOBjectId";
     //
 
-    public final String UserGroups = "InGroups";
-
+    //User
+    public final String UserGroups = "Groups";
+    //
     public final String TestObject = "TestObject1";
 }

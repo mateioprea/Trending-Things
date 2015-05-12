@@ -11,6 +11,7 @@ import com.parse.ParseUser;
 public class MyApplication extends Application{
 
     public ParseUser currentUser = null;
+    public boolean debug = false;
 
     @Override public void onCreate() {
         super.onCreate();

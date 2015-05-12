@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import java.util.Calendar;
@@ -23,15 +24,20 @@ import java.util.Date;
 
 public class NewGroup extends Activity {
 
+    private ParseUser currentUser;
+    private boolean debug;
+
     class SaveGroupButtonClick implements View.OnClickListener{
         @Override
         public void onClick(View v) {
             TextView txt;
             String value;
+            final String name;
             ParseObject newGroup = new ParseObject(Constants.GroupObject);
 
             txt = (EditText)findViewById(R.id.newGroupName);
             value = txt.getText().toString();
+            name = value;
             if(value.isEmpty()){
                 Toast.makeText(getApplicationContext(),"Completati numele grupului!",Toast.LENGTH_SHORT).show();
                 return;
@@ -68,6 +74,8 @@ public class NewGroup extends Activity {
                 public void done(ParseException e) {
                     if(e == null){
                         Toast.makeText(getApplicationContext(),"Grup salvat cu success",Toast.LENGTH_SHORT).show();
+                        currentUser.addUnique(Constants.UserGroups, name);
+                        currentUser.saveInBackground();
                         setResult(RESULT_OK);
                         finish();
                     }
@@ -93,6 +101,9 @@ public class NewGroup extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_group);
+
+        currentUser = ((MyApplication)getApplication()).currentUser;
+        debug = ((MyApplication)getApplication()).debug;
 
         ((Button)findViewById(R.id.buttonSaveNewGroup)).setOnClickListener(new SaveGroupButtonClick());
 

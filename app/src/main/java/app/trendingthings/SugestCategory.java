@@ -17,12 +17,16 @@ import com.parse.SaveCallback;
 
 public class SugestCategory extends Activity {
 
+    private boolean debug;
+
     class SaveSuggestedCategoryClick implements View.OnClickListener{
         @Override
         public void onClick(View v) {
             EditText txt = (EditText)findViewById(R.id.suggestedCategoryName);
             if(txt.getText().toString().isEmpty()){
-                Toast.makeText(getApplicationContext(),"Completati numele categoriei", Toast.LENGTH_LONG).show();
+                if(debug) {
+                    Toast.makeText(getApplicationContext(), "Completati numele categoriei", Toast.LENGTH_LONG).show();
+                }
             }
             else{
                 ParseObject newSuggestedCategory = new ParseObject(Constants.SuggestedCategoryObject);
@@ -31,10 +35,12 @@ public class SugestCategory extends Activity {
                     @Override
                     public void done(ParseException e) {
                         if(e == null){
-                            Toast.makeText(getApplicationContext(),"Sugestie salvata.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Sugestie salvata.", Toast.LENGTH_LONG).show();
+
                         }
                         else{
-                            Toast.makeText(getApplicationContext(),"Eroare " + e.toString(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Eroare " + e.toString(), Toast.LENGTH_LONG).show();
+
                         }
                         finish();
                     }
@@ -47,6 +53,8 @@ public class SugestCategory extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sugest_category);
+
+        debug = ((MyApplication)getApplication()).debug;
 
         ((Button)findViewById(R.id.SuggestCategorySaveButton)).setOnClickListener(new SaveSuggestedCategoryClick());
         ((Button)findViewById(R.id.SuggestCategoryCancelButton)).setOnClickListener(new View.OnClickListener() {

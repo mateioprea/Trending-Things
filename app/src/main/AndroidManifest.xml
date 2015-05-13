@@ -116,6 +116,10 @@
             android:name=".ViewInvites"
             android:label="@string/title_activity_view_invites" >
         </activity>
+        <activity
+            android:name=".SearchGift"
+            android:label="@string/title_activity_search_gift" >
+        </activity>
     </application>
 
 </manifest>

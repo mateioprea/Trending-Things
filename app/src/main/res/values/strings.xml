@@ -14,7 +14,7 @@
     <string name="GiftName">Denumire</string>
     <string name="GiftDescription">Descriere</string>
     <string name="GiftCategory">Categorie</string>
-    <string name="ToSex">Sex ?</string>
+    <string name="ToSex">Sex</string>
     <string name="title_activity_choose_action">ChooseAction</string>
     <string name="AddGift">Adauga un cadou gasit</string>
     <string name="SearchGift">Cauta un cadou</string>
@@ -40,4 +40,9 @@
     <string name="SearchUserName">Utilizator cautat</string>
     <string name="SearchUserNameButton">Cauta utilizator</string>
     <string name="title_activity_view_invites">ViewInvites</string>
+    <string name="saveGift">Salveaza cadou</string>
+    <string name="title_activity_search_gift">SearchGift</string>
+    <string name="giftPrice">Pret</string>
+    <string name="giftAge">Varsta</string>
+    <string name="searchForGift">Cauta</string>
 </resources>

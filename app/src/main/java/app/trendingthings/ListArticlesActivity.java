@@ -50,6 +50,8 @@ public class ListArticlesActivity extends Activity {
     private Bitmap picBitmap;
     private List<ParseObject> giftCategories;
     private Spinner spinnerCategory;
+    private Spinner spinnerSex;
+    private String[] sexes = {"Masculin", "Feminim", "Unisex"};
 
     public class TakeFromServer implements View.OnClickListener
     {
@@ -93,12 +95,12 @@ public class ListArticlesActivity extends Activity {
     {
         @Override
         public void onClick(View v) {
-            ParseObject toSave = new ParseObject(Constants.TestObject);
+            ParseObject toSave = new ParseObject(Constants.GiftObject);
             ParseUser currentUser = ((MyApplication)getApplication()).currentUser;
             //salvare date pe gift
-            toSave.put("User",currentUser.getUsername());
+            toSave.put(Constants.GiftUser, currentUser.getUsername());
 
-            toSave.put("Message","Test salvare obiect");
+            //toSave.put("Message","Test salvare obiect");
 
             EditText txt = (EditText)findViewById(R.id.GiftNameInput);
             toSave.put(Constants.GiftName, txt.getText().toString());
@@ -106,20 +108,15 @@ public class ListArticlesActivity extends Activity {
             txt = (EditText)findViewById(R.id.GiftDescriptionInput);
             toSave.put(Constants.GiftDescription, txt.getText().toString());
 
-            int categoryId = GetCategoryId(spinnerCategory.getSelectedItem().toString());
+            txt = (EditText)findViewById(R.id.GiftAgeInput);
+            toSave.put(Constants.GiftAge, Integer.parseInt(txt.getText().toString()));
 
-            if(categoryId < 0){
-                return;
-            }
+            txt = (EditText)findViewById(R.id.GiftPriceInput);
+            toSave.put(Constants.GiftPrice, Integer.parseInt(txt.getText().toString()));
 
-            toSave.put(Constants.CategoryId, categoryId);
+            toSave.put(Constants.GiftCategory, spinnerCategory.getSelectedItem().toString());
 
-            Switch switchSex = (Switch)findViewById(R.id.switch1);
-            if(switchSex.isChecked()){
-                toSave.put(Constants.GiftPersonSex, switchSex.getTextOn());
-            }else {
-                toSave.put(Constants.GiftPersonSex, switchSex.getTextOff());
-            }
+            toSave.put(Constants.GiftPersonSex, spinnerSex.getSelectedItem().toString());
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             picBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
@@ -140,7 +137,7 @@ public class ListArticlesActivity extends Activity {
                 }
             });
 
-            toSave.put("picture", picture);
+            toSave.put(Constants.GiftPicture, picture);
 
             toSave.saveInBackground(new SaveCallback() {
                 @Override
@@ -196,6 +193,14 @@ public class ListArticlesActivity extends Activity {
         spinnerCategory.setAdapter(dataAdapter);
     }
 
+    private void LoadSex(){
+        Spinner spinnerSex = (Spinner)findViewById(R.id.spinnerGiftSex);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, sexes);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSex.setAdapter(dataAdapter);
+    }
+
     private void GetGiftCategories(){
         ParseQuery<ParseObject> getCategories = ParseQuery.getQuery(Constants.Categories);
         getCategories.orderByAscending(Constants.CategoryId);
@@ -228,8 +233,10 @@ public class ListArticlesActivity extends Activity {
         setContentView(R.layout.list_articles);
 
         spinnerCategory = (Spinner)findViewById(R.id.GiftCategorySpinnerInput);
+        spinnerSex = (Spinner)findViewById(R.id.spinnerGiftSex);
 
         GetGiftCategories();
+        LoadSex();
 
         MyApplication myApp = (MyApplication)getApplication();
         ParseUser currentUser = myApp.currentUser;
@@ -243,8 +250,8 @@ public class ListArticlesActivity extends Activity {
         Button saveTest = (Button)findViewById(R.id.SaveObjectButton);
         saveTest.setOnClickListener(new SavePhoto());
 
-        Button takeFromServer = (Button)findViewById(R.id.TakeFromServer);
-        takeFromServer.setOnClickListener(new TakeFromServer());
+        //Button takeFromServer = (Button)findViewById(R.id.TakeFromServer);
+        //takeFromServer.setOnClickListener(new TakeFromServer());
 
         //Toast.makeText(getApplicationContext(),"From Article List " + currentUser.getUsername(),Toast.LENGTH_LONG).show();
     }

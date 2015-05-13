@@ -50,7 +50,8 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/GiftName"
-                    android:id="@+id/textView" />
+                    android:id="@+id/textView"
+                    android:layout_gravity="center" />
 
                 <EditText
                     android:layout_width="match_parent"
@@ -68,7 +69,8 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/GiftDescription"
-                    android:id="@+id/textView2" />
+                    android:id="@+id/textView2"
+                    android:layout_gravity="center" />
 
                 <EditText
                     android:layout_width="match_parent"
@@ -86,7 +88,8 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/GiftCategory"
-                    android:id="@+id/textView3" />
+                    android:id="@+id/textView3"
+                    android:layout_gravity="center" />
 
                 <Spinner
                     android:layout_width="match_parent"
@@ -99,14 +102,61 @@
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent">
 
-                <Switch
-                    android:layout_width="match_parent"
-                    android:layout_height="39dp"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/ToSex"
-                    android:textOn="Masculin"
-                    android:textOff="Feminin"
-                    android:id="@+id/switch1" />
+                    android:id="@+id/textView14"
+                    android:layout_weight="1" />
+
+                <Spinner
+                    android:layout_width="281dp"
+                    android:layout_height="36dp"
+                    android:id="@+id/spinnerGiftSex" />
             </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/giftPrice"
+                android:id="@+id/textView8"
+                android:layout_weight="0.2"
+                android:layout_gravity="center" />
+
+            <EditText
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/GiftPriceInput"
+                android:layout_weight="0.3" />
+
+            <TextView
+                android:layout_width="53dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/giftAge"
+                android:id="@+id/textView9"
+                android:layout_weight="0.2"
+                android:layout_gravity="center" />
+
+            <EditText
+                android:layout_width="127dp"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:ems="10"
+                android:id="@+id/GiftAgeInput"
+                android:layout_weight="0.3" />
+
         </LinearLayout>
 
         <Button
@@ -118,16 +168,10 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Save Test Object"
+            android:text="@string/saveGift"
             android:id="@+id/SaveObjectButton"
             android:layout_gravity="center_horizontal" />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Take last picture from server"
-            android:id="@+id/TakeFromServer"
-            android:layout_gravity="center_horizontal" />
     </LinearLayout>
 
 </LinearLayout>

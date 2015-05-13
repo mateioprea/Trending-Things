@@ -37,6 +37,14 @@ public class ChooseAction extends Activity {
         }
     }
 
+    class SearchGiftClick implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            Intent goToSearch = new Intent(getApplicationContext(), SearchGift.class);
+            startActivity(goToSearch);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,12 +52,7 @@ public class ChooseAction extends Activity {
 
         ((Button)findViewById(R.id.buttonAddGift)).setOnClickListener(new AddGiftClick());
 
-        ((Button)findViewById(R.id.buttonSearchGift)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"TODO view list of gifts",Toast.LENGTH_LONG).show();
-            }
-        });
+        ((Button)findViewById(R.id.buttonSearchGift)).setOnClickListener(new SearchGiftClick());
 
         ((Button)findViewById(R.id.buttonCreateGroup)).setOnClickListener(new GroupsClick());
 

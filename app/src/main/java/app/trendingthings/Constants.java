@@ -5,10 +5,15 @@ package app.trendingthings;
  */
 public interface Constants {
     //Gift Columns
+    public final String GiftObject = "Gift";
     public final String GiftName = "Name";
     public final String GiftDescription = "Description";
     public final String GiftCategory = "CategoryId";
     public final String GiftPersonSex = "PersonSex";
+    public final String GiftUser = "User";
+    public final String GiftPicture = "Picture";
+    public final String GiftAge = "Age";
+    public final String GiftPrice = "Price";
     //
 
     //GiftCategory
@@ -50,6 +55,9 @@ public interface Constants {
 
     //User
     public final String UserGroups = "Groups";
+    //
+
+
     //
     public final String TestObject = "TestObject1";
 }

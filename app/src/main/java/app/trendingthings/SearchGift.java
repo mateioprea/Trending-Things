@@ -1,14 +1,17 @@
 package app.trendingthings;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -25,6 +28,7 @@ import java.util.List;
 public class SearchGift extends Activity {
 
     private List<ParseObject> giftCategories;
+    private List<ParseObject> giftSearchResult;
 
     private String[] sexes = {"Masculin", "Feminim", "Unisex"};
 
@@ -32,6 +36,8 @@ public class SearchGift extends Activity {
         @Override
         public void onClick(View v) {
             ParseQuery getGifts = new ParseQuery(Constants.GiftObject);
+
+            getGifts.orderByDescending(Constants.GiftGeneralRating);
 
             Spinner spinnerCat = (Spinner)findViewById(R.id.searchSpinnerCategorie);
             String category = spinnerCat.getSelectedItem().toString();
@@ -74,7 +80,20 @@ public class SearchGift extends Activity {
                 getGifts.whereLessThanOrEqualTo(Constants.GiftPrice, Integer.parseInt(value));
             }
 
-            getGifts.countInBackground(new CountCallback() {
+            getGifts.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> list, ParseException e) {
+                    if(e == null){
+                        giftSearchResult = list;
+                        PopulateGifts(giftSearchResult);
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(),e.toString(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+            /*getGifts.countInBackground(new CountCallback() {
                 @Override
                 public void done(int i, ParseException e) {
                     if(e == null) {
@@ -84,8 +103,33 @@ public class SearchGift extends Activity {
                         Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
                     }
                 }
-            });
+            });*/
         }
+    }
+
+    private void PopulateGifts(final List<ParseObject> gifts){
+        List<String> giftNames = new ArrayList<String>();
+        for(int i = 0; i < gifts.size(); i++){
+            giftNames.add(gifts.get(i).get(Constants.GiftName).toString() + "\n" +
+                          gifts.get(i).get(Constants.GiftDescription).toString());
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, giftNames);
+
+        ((ListView)findViewById(R.id.searchResultGiftsListView)).setAdapter(adapter);
+        ((ListView)findViewById(R.id.searchResultGiftsListView)).setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                String objId = giftSearchResult.get(position).getObjectId();
+
+                Toast.makeText(getApplicationContext(),position + "", Toast.LENGTH_LONG).show();
+                Intent goToGiftView = new Intent(getApplicationContext(), ViewGift.class);
+                goToGiftView.putExtra(Constants.GiftId, objId);
+                startActivity(goToGiftView);
+            }
+        });
     }
 
     private void LoadCategories(){

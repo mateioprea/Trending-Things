@@ -144,7 +144,7 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listView"
+        android:id="@+id/searchResultGiftsListView"
         android:layout_below="@+id/searchButtonGift"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />

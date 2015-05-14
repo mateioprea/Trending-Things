@@ -12,15 +12,18 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,6 +38,9 @@ public class MyGroups extends Activity {
     private ParseUser currentUser;
     private boolean debug;
     private boolean goToInvites = true;
+
+    private boolean hasGift = false;
+    private String giftId;
 
     class ViewInvitesClick implements View.OnClickListener{
         @Override
@@ -58,6 +64,22 @@ public class MyGroups extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_groups);
+
+        Intent receivedIntent = getIntent();
+        if(receivedIntent != null){
+            String lala = receivedIntent.getStringExtra(Constants.Action);
+            if(lala != null) {
+                if (lala.equals(Constants.Recommend)){
+                    ((Button) findViewById(R.id.buttonCreateNew)).setVisibility(View.GONE);
+                    ((Button) findViewById(R.id.viewInvitesButton)).setVisibility(View.GONE);
+                    hasGift = true;
+                    giftId = receivedIntent.getStringExtra(Constants.GiftId);
+                }
+            }
+        }
+        else{
+            ((TextView)findViewById(R.id.chooseGroupText)).setVisibility(View.GONE);
+        }
 
         currentUser = ((MyApplication)getApplication()).currentUser;
         debug = ((MyApplication)getApplication()).debug;
@@ -85,10 +107,42 @@ public class MyGroups extends Activity {
         groups.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(), myGroups.get(position).getString(Constants.GroupName), Toast.LENGTH_LONG).show();
-                Intent goToGroupView = new Intent(getApplicationContext(), GroupView.class);
-                goToGroupView.putExtra(Constants.GroupToView, myGroups.get(position).getObjectId());
-                startActivity(goToGroupView);
+                //Toast.makeText(getApplicationContext(), myGroups.get(position).getString(Constants.GroupName), Toast.LENGTH_LONG).show();
+                if(hasGift){
+                    final int pos = position;
+                    ParseQuery getGift = new ParseQuery(Constants.GiftObject);
+                    getGift.getInBackground(giftId, new GetCallback<ParseObject>() {
+                        @Override
+                        public void done(ParseObject parseObject, ParseException e) {
+                            if(e == null) {
+                                ParseRelation<ParseObject> giftsOnGroup = myGroups.get(pos).getRelation(Constants.GroupRelationGift);
+                                giftsOnGroup.add(parseObject);
+                                parseObject.saveInBackground(new SaveCallback() {
+                                    @Override
+                                    public void done(ParseException e) {
+                                        if(e == null){
+                                            Toast.makeText(getApplicationContext(),"Cadou sugerat in grup", Toast.LENGTH_LONG).show();
+                                        }
+                                        else{
+                                            Toast.makeText(getApplicationContext(),"Gift-group " + e.toString(), Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
+                                myGroups.get(pos).saveInBackground();
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext(),"get gift" + e.toString(), Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+
+
+                }
+                else {
+                    Intent goToGroupView = new Intent(getApplicationContext(), GroupView.class);
+                    goToGroupView.putExtra(Constants.GroupToView, myGroups.get(position).getObjectId());
+                    startActivity(goToGroupView);
+                }
             }
         });
     }

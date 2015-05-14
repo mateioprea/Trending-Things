@@ -120,6 +120,10 @@
             android:name=".SearchGift"
             android:label="@string/title_activity_search_gift" >
         </activity>
+        <activity
+            android:name=".ViewGift"
+            android:label="@string/title_activity_view_gift" >
+        </activity>
     </application>
 
 </manifest>

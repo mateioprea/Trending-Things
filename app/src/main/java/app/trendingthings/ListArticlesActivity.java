@@ -118,6 +118,10 @@ public class ListArticlesActivity extends Activity {
 
             toSave.put(Constants.GiftPersonSex, spinnerSex.getSelectedItem().toString());
 
+            toSave.put(Constants.GiftVotes, 0);
+            toSave.put(Constants.GiftRating, 0.0);
+            toSave.put(Constants.GiftGeneralRating, 0.0);
+
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             picBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
             final byte[] byteArray = stream.toByteArray();

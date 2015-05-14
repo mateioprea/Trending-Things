@@ -45,4 +45,8 @@
     <string name="giftPrice">Pret</string>
     <string name="giftAge">Varsta</string>
     <string name="searchForGift">Cauta</string>
+    <string name="title_activity_view_gift">ViewGift</string>
+    <string name="recommendToGroup">Recomanda in grup</string>
+    <string name="backToSearch">Inapoi la cautare</string>
+    <string name="chooseGroup">Alege group pentru cadou</string>
 </resources>

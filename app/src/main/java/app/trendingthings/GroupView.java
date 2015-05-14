@@ -14,8 +14,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.CountCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -58,6 +60,23 @@ public class GroupView extends Activity {
         commentsListView.setSelection(comments.size() - 1);
     }
 
+    private void LoadGifts(){
+        ParseRelation<ParseObject> giftsInGroup = currentGroup.getRelation(Constants.GroupRelationGift);
+        if(giftsInGroup != null) {
+            //ParseQuery<ParseObject> gifts = giftsInGroup.getQuery();
+            //gifts.countInBackground(new CountCallback() {
+            giftsInGroup.getQuery().countInBackground(new CountCallback() {
+                public void done(int i, ParseException e) {
+                    if (e == null) {
+                        Toast.makeText(getApplicationContext(), "Cadouri in grup " + i, Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "cad " + e.toString(), Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+        }
+    }
+
     private void LoadGroup(String objId){
         ParseQuery getGroup = new ParseQuery(Constants.GroupObject);
         getGroup.getInBackground(objId, new GetCallback<ParseObject>() {
@@ -68,6 +87,7 @@ public class GroupView extends Activity {
                     ((TextView)findViewById(R.id.GropuViewName)).setText(parseObject.getString(Constants.GroupName));
                     ((TextView)findViewById(R.id.GroupViewDescription)).setText(parseObject.getString(Constants.GroupDescription));
                     LoadComments();
+                    LoadGifts();
                 }
                 else{
                     Toast.makeText(getApplicationContext(),"Eroare :" + e.toString(), Toast.LENGTH_LONG).show();

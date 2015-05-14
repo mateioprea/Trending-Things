@@ -6,6 +6,7 @@ package app.trendingthings;
 public interface Constants {
     //Gift Columns
     public final String GiftObject = "Gift";
+    public final String GiftId = "objectId";
     public final String GiftName = "Name";
     public final String GiftDescription = "Description";
     public final String GiftCategory = "CategoryId";
@@ -14,6 +15,9 @@ public interface Constants {
     public final String GiftPicture = "Picture";
     public final String GiftAge = "Age";
     public final String GiftPrice = "Price";
+    public final String GiftVotes = "Votes";
+    public final String GiftRating = "Rating";
+    public final String GiftGeneralRating = "GeneralRating";
     //
 
     //GiftCategory
@@ -29,6 +33,7 @@ public interface Constants {
     public final String GroupDescription = "Description";
     public final String GroupDate = "Date";
     public final String GropuRelationComments = "Comments";
+    public final String GroupRelationGift = "GroupGifts";
     //
 
     //GroupComment
@@ -60,4 +65,6 @@ public interface Constants {
 
     //
     public final String TestObject = "TestObject1";
+    public final String Action = "Action";
+    public final String Recommend = "Recommend";
 }

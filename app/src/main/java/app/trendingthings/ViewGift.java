@@ -155,8 +155,8 @@ public class ViewGift extends Activity {
             double userRating = ((RatingBar)findViewById(R.id.ratingBar)).getRating();
             if(userRating > 0) {
                 int currentRatingNumber = Integer.parseInt(gift.get(Constants.GiftVotes).toString());
-                double rating = Integer.parseInt(gift.get(Constants.GiftRating).toString());
-                double generalRating = Integer.parseInt(gift.get(Constants.GiftGeneralRating).toString());
+                double rating = Double.parseDouble(gift.get(Constants.GiftRating).toString());
+                double generalRating = Double.parseDouble(gift.get(Constants.GiftGeneralRating).toString());
 
                 currentRatingNumber++;
                 rating += userRating;

@@ -32,12 +32,16 @@ import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
+import android.content.pm.PackageManager;
+import android.hardware.Camera;
+import android.hardware.Camera.CameraInfo;
+import android.util.Log;
 /**
  * Created by matei on 4/19/15.
  */
@@ -52,7 +56,10 @@ public class ListArticlesActivity extends Activity {
     private Spinner spinnerCategory;
     private Spinner spinnerSex;
     private String[] sexes = {"Masculin", "Feminim", "Unisex"};
-
+    private final static String DEBUG_TAG = "MakePhotoActivity";
+    private Camera camera;
+    private int cameraId = 0;
+    private boolean safeToTakePicture = false;
     public class TakeFromServer implements View.OnClickListener
     {
         @Override
@@ -172,21 +179,19 @@ public class ListArticlesActivity extends Activity {
                 catch (IOException ex){
                     Toast.makeText(getApplicationContext(),ex.toString(), Toast.LENGTH_LONG).show();
                 }
-
                 if(photoFile != null){
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
                             Uri.fromFile(photoFile));
                     startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE );
                 }else {
-                    Toast.makeText(getApplicationContext(), "Could not find camera! ", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Could not find camera!1 ", Toast.LENGTH_LONG).show();
                 }
             }
             else {
-                Toast.makeText(getApplicationContext(), "Could not find camera! ", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Could not find camera! 2", Toast.LENGTH_LONG).show();
             }
         }
     }
-
     private void SetCategoriesSpinnerValues(List<ParseObject> values){
 
         List<String> stringValues = new ArrayList<String>();
@@ -255,7 +260,6 @@ public class ListArticlesActivity extends Activity {
 
         Button saveTest = (Button)findViewById(R.id.SaveObjectButton);
         saveTest.setOnClickListener(new SavePhoto());
-
         //Button takeFromServer = (Button)findViewById(R.id.TakeFromServer);
         //takeFromServer.setOnClickListener(new TakeFromServer());
 

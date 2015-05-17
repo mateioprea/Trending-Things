@@ -33,6 +33,7 @@ public class AddUserToGroup extends Activity {
     private String groupId;
     private ParseObject currentGroup;
     ArrayList<String> resultUsers;
+    private boolean debug;
 
     class SearchButtonClick implements View.OnClickListener{
         @Override
@@ -45,7 +46,9 @@ public class AddUserToGroup extends Activity {
                 @Override
                 public void done(List<ParseUser> parseUsers, ParseException e) {
                     if(e == null){
-                        Toast.makeText(getApplicationContext(),parseUsers.size() + "" , Toast.LENGTH_SHORT).show();
+                        if(debug) {
+                            Toast.makeText(getApplicationContext(), parseUsers.size() + "", Toast.LENGTH_SHORT).show();
+                        }
                         ListView userList = (ListView)findViewById(R.id.userListView);
                         resultUsers = new ArrayList<String>();
                         for(int i = 0; i < parseUsers.size(); i++){
@@ -106,6 +109,8 @@ public class AddUserToGroup extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_user_to_group);
+
+        debug = ((MyApplication)getApplication()).debug;
 
         Intent received = getIntent();
         groupId = received.getStringExtra(Constants.GroupId);

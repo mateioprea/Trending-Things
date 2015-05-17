@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 public class ChooseAction extends Activity {
 
+    private boolean debug;
+
     class GroupsClick implements View.OnClickListener{
         @Override
         public void onClick(View v) {
@@ -49,6 +51,8 @@ public class ChooseAction extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_action);
+
+        debug = ((MyApplication)getApplication()).debug;
 
         ((Button)findViewById(R.id.buttonAddGift)).setOnClickListener(new AddGiftClick());
 

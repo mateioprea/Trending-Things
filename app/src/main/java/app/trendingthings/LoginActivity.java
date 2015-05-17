@@ -22,19 +22,25 @@ public class LoginActivity extends Activity {
     private String username;
     private String password;
     private Intent signupIntent;
+    private boolean debug;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        debug = ((MyApplication)getApplication()).debug;
+
         ParseUser currentUser = ParseUser.getCurrentUser();
         //User is logged in => go to articles activity
         if (currentUser != null) {
-            Toast.makeText(getApplicationContext(),currentUser.getUsername(),Toast.LENGTH_SHORT).show();
+            if(debug) {
+                Toast.makeText(getApplicationContext(), currentUser.getUsername(), Toast.LENGTH_SHORT).show();
+            }
             //save currentUser to Application for user in future activities without query
             SaveUserToApp(currentUser);
             GoToChoose();
+            finish();
         }
         //User must login or signUp
         else {
@@ -57,6 +63,7 @@ public class LoginActivity extends Activity {
                                 //save currentUser to Application for user in future activities without query
                                 SaveUserToApp(currentUser);
                                 GoToChoose();
+                                finish();
                             } else {
                                 Toast.makeText(getApplicationContext(),
                                         "Wrong username/password combo",

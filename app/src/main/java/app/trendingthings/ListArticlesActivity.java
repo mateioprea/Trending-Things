@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -57,10 +58,10 @@ public class ListArticlesActivity extends Activity {
     private Spinner spinnerCategory;
     private Spinner spinnerSex;
     private String[] sexes = {"Masculin", "Feminim", "Unisex"};
-    private final static String DEBUG_TAG = "MakePhotoActivity";
-    private Camera camera;
-    private int cameraId = 0;
-    private boolean safeToTakePicture = false;
+    private boolean savedObject = false;
+    private boolean debug;
+
+
     public class TakeFromServer implements View.OnClickListener
     {
         @Override
@@ -72,7 +73,9 @@ public class ListArticlesActivity extends Activity {
                 @Override
                 public void done(List<ParseObject> parseObjects, ParseException e) {
                     if(e == null){
-                        Toast.makeText(getApplicationContext(),parseObjects.get(0).getCreatedAt().toString(),Toast.LENGTH_LONG).show();
+                        if(debug) {
+                            Toast.makeText(getApplicationContext(), parseObjects.get(0).getCreatedAt().toString(), Toast.LENGTH_LONG).show();
+                        }
                         GetPicture(parseObjects.get(0));
                     }
                     else{
@@ -88,7 +91,9 @@ public class ListArticlesActivity extends Activity {
                 @Override
                 public void done(byte[] bytes, ParseException e) {
                     if(e == null){
-                        Toast.makeText(getApplicationContext(), "Successfully retreived" + bytes.length, Toast.LENGTH_LONG).show();
+                        if(debug) {
+                            Toast.makeText(getApplicationContext(), "Successfully retreived" + bytes.length, Toast.LENGTH_LONG).show();
+                        }
                         ((ImageView)findViewById(R.id.imageView)).setImageBitmap(BitmapFactory.decodeByteArray(bytes,0,bytes.length));
                     }
                     else{
@@ -103,77 +108,83 @@ public class ListArticlesActivity extends Activity {
     {
         @Override
         public void onClick(View v) {
-            ParseObject toSave = new ParseObject(Constants.GiftObject);
-            ParseUser currentUser = ((MyApplication)getApplication()).currentUser;
+            if (savedObject == false) {
+                savedObject = true;
+                ParseObject toSave = new ParseObject(Constants.GiftObject);
+                ParseUser currentUser = ((MyApplication) getApplication()).currentUser;
 
-            //salvare date pe gift
-            toSave.put(Constants.GiftUser, currentUser.getUsername());
+                //salvare date pe gift
+                toSave.put(Constants.GiftUser, currentUser.getUsername());
 
-            EditText txt = (EditText)findViewById(R.id.GiftNameInput);
-            toSave.put(Constants.GiftName, txt.getText().toString());
+                EditText txt = (EditText) findViewById(R.id.GiftNameInput);
+                toSave.put(Constants.GiftName, txt.getText().toString());
 
-            txt = (EditText)findViewById(R.id.GiftDescriptionInput);
-            toSave.put(Constants.GiftDescription, txt.getText().toString());
+                txt = (EditText) findViewById(R.id.GiftDescriptionInput);
+                toSave.put(Constants.GiftDescription, txt.getText().toString());
 
-            txt = (EditText)findViewById(R.id.GiftAgeInput);
-            toSave.put(Constants.GiftAge, Integer.parseInt(txt.getText().toString()));
+                txt = (EditText) findViewById(R.id.GiftAgeInput);
+                toSave.put(Constants.GiftAge, Integer.parseInt(txt.getText().toString()));
 
-            txt = (EditText)findViewById(R.id.GiftPriceInput);
-            toSave.put(Constants.GiftPrice, Integer.parseInt(txt.getText().toString()));
+                txt = (EditText) findViewById(R.id.GiftPriceInput);
+                toSave.put(Constants.GiftPrice, Integer.parseInt(txt.getText().toString()));
 
-            toSave.put(Constants.GiftCategory, spinnerCategory.getSelectedItem().toString());
+                toSave.put(Constants.GiftCategory, spinnerCategory.getSelectedItem().toString());
 
-            toSave.put(Constants.GiftPersonSex, spinnerSex.getSelectedItem().toString());
+                toSave.put(Constants.GiftPersonSex, spinnerSex.getSelectedItem().toString());
 
-            toSave.put(Constants.GiftVotes, 0);
-            toSave.put(Constants.GiftRating, 0.0);
-            toSave.put(Constants.GiftGeneralRating, 0.0);
+                toSave.put(Constants.GiftVotes, 0);
+                toSave.put(Constants.GiftRating, 0.0);
+                toSave.put(Constants.GiftGeneralRating, 0.0);
 
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            //if(stream.size() > 0) {
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                //if(stream.size() > 0) {
                 picBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            //}
+                //}
 
-            final byte[] byteArray = stream.toByteArray();
+                final byte[] byteArray = stream.toByteArray();
 
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
-            ParseFile picture = new ParseFile(timeStamp + ".jpg", byteArray);
+                ParseFile picture = new ParseFile(timeStamp + ".jpg", byteArray);
 
-            picture.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if(e == null) {
-                        Toast.makeText(getApplicationContext(), "Fisier salvat " + byteArray.length, Toast.LENGTH_LONG).show();
+                picture.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            if(debug) {
+                                Toast.makeText(getApplicationContext(), "Fisier salvat " + byteArray.length, Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+                        }
                     }
-                    else{
-                        Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
-                    }
-                }
 
-            },new ProgressCallback() {
-                @Override
-                public void done(Integer procentDone) {
-                    if (procentDone % 20 == 0){
-                        Toast.makeText(getApplicationContext(), "Upload progress: " + procentDone +"%", Toast.LENGTH_SHORT).show();
+                }, new ProgressCallback() {
+                    @Override
+                    public void done(Integer procentDone) {
+                        if (procentDone % 20 == 0) {
+                            ((ProgressBar)findViewById(R.id.progressBar)).setProgress(procentDone);
+                        }
                     }
-                }
-            });
+                });
 
-            toSave.put(Constants.GiftPicture, picture);
+                toSave.put(Constants.GiftPicture, picture);
 
-            toSave.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                    if(e == null){
-                        Toast.makeText(getApplicationContext(),"Obiect salvat cu success",Toast.LENGTH_LONG).show();
-                        finish();
+                toSave.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e == null) {
+                            Toast.makeText(getApplicationContext(), "Cadou salvat cu success", Toast.LENGTH_LONG).show();
+                            finish();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Eroare : " + e.toString(), Toast.LENGTH_LONG).show();
+                        }
                     }
-                    else{
-                        Toast.makeText(getApplicationContext(),"Eroare : " + e.toString(),Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
+                });
+            }
+            else{
+                Toast.makeText(getApplicationContext(), "Cadoul se salveaza", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -230,7 +241,9 @@ public class ListArticlesActivity extends Activity {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 if(e == null){
-                    Toast.makeText(getApplicationContext(),parseObjects.size()+ " ",Toast.LENGTH_LONG).show();
+                    if(debug) {
+                        Toast.makeText(getApplicationContext(), parseObjects.size() + " ", Toast.LENGTH_LONG).show();
+                    }
                     giftCategories = parseObjects;
                     SetCategoriesSpinnerValues(giftCategories);
                 }
@@ -253,6 +266,8 @@ public class ListArticlesActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list_articles);
+
+        debug = ((MyApplication)getApplication()).debug;
 
         spinnerCategory = (Spinner)findViewById(R.id.GiftCategorySpinnerInput);
         spinnerSex = (Spinner)findViewById(R.id.spinnerGiftSex);
@@ -308,7 +323,9 @@ public class ListArticlesActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK){
-            Toast.makeText(getApplicationContext(),mCurrentPhotoPath,Toast.LENGTH_LONG).show();
+            if(debug) {
+                Toast.makeText(getApplicationContext(), mCurrentPhotoPath, Toast.LENGTH_LONG).show();
+            }
             GalleryAddPic();
             SetPicture();
         }
@@ -337,7 +354,9 @@ public class ListArticlesActivity extends Activity {
         Uri contentUri = Uri.fromFile(f);
         mediaScanIntent.setData(contentUri);
         this.sendBroadcast(mediaScanIntent);
-        Toast.makeText(getApplicationContext(),"Send intent for scann",Toast.LENGTH_LONG).show();
+        if(debug) {
+            Toast.makeText(getApplicationContext(), "Send intent for scann", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void SetPicture(){
@@ -361,6 +380,8 @@ public class ListArticlesActivity extends Activity {
         picBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath,bmpOptions);
 
         myImageView.setImageBitmap(picBitmap);
-        Toast.makeText(getApplicationContext(),"Set Picture complete " + picBitmap.getByteCount(),Toast.LENGTH_LONG).show();
+        if(debug) {
+            Toast.makeText(getApplicationContext(), "Set Picture complete " + picBitmap.getByteCount(), Toast.LENGTH_LONG).show();
+        }
     }
 }

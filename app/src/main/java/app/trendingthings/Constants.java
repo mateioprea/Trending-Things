@@ -68,5 +68,6 @@ public interface Constants {
     public final String Action = "Action";
     public final String Recommend = "Recommend";
 
-    public final String viewGiftsGroupId = "groupID";
+    public final String ViewGiftsGroupId = "groupID";
+    public final String FromGroupGifts = "fromGroup";
 }

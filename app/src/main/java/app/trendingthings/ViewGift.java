@@ -3,6 +3,7 @@ package app.trendingthings;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.media.Rating;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -28,6 +29,8 @@ import java.util.List;
 public class ViewGift extends Activity {
 
     private ParseObject gift;
+    private boolean debug;
+    private boolean viewOnly = false;
 
     private void LoadFields(){
         ((TextView)findViewById(R.id.GiftNameView)).setText("   " + gift.get(Constants.GiftName).toString());
@@ -75,14 +78,18 @@ public class ViewGift extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_gift);
 
+        debug = ((MyApplication)getApplication()).debug;
+
         Intent received = getIntent();
 
-//        /Toast.makeText(getApplicationContext(),received.getStringExtra(Constants.GiftId), Toast.LENGTH_LONG).show();
         LoadGift(received.getStringExtra(Constants.GiftId));
         ((RatingBar)findViewById(R.id.ratingBar)).setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                Toast.makeText(getApplicationContext(), rating + " " , Toast.LENGTH_SHORT).show();
+                //TODO de facut rating
+                if(debug) {
+                    Toast.makeText(getApplicationContext(), rating + " ", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -104,6 +111,13 @@ public class ViewGift extends Activity {
                 finish();
             }
         });
+
+        if(received.getStringExtra(Constants.FromGroupGifts) != null){
+            viewOnly = true;
+            ((Button)findViewById(R.id.recommendButton)).setVisibility(View.GONE);
+            ((Button)findViewById(R.id.backTosearchButton)).setVisibility(View.GONE);
+            ((RatingBar)findViewById(R.id.ratingBar)).setVisibility(View.GONE);
+        }
     }
 
 
@@ -112,6 +126,11 @@ public class ViewGift extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_view_gift, menu);
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
@@ -127,5 +146,27 @@ public class ViewGift extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(viewOnly == false){
+            double userRating = ((RatingBar)findViewById(R.id.ratingBar)).getRating();
+            if(userRating > 0) {
+                int currentRatingNumber = Integer.parseInt(gift.get(Constants.GiftVotes).toString());
+                double rating = Integer.parseInt(gift.get(Constants.GiftRating).toString());
+                double generalRating = Integer.parseInt(gift.get(Constants.GiftGeneralRating).toString());
+
+                currentRatingNumber++;
+                rating += userRating;
+                generalRating = rating / currentRatingNumber;
+
+                gift.put(Constants.GiftVotes, currentRatingNumber);
+                gift.put(Constants.GiftRating, rating);
+                gift.put(Constants.GiftGeneralRating, generalRating);
+                gift.saveInBackground();
+            }
+        }
     }
 }

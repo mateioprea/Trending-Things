@@ -18,12 +18,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Large Text"
-            android:id="@+id/gitfsInGroupCount" />
+            android:id="@+id/gitfsInGroupCount"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"/>
 
         <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/listView" />
+            android:id="@+id/giftsInGroupListView" />
     </LinearLayout>
 </RelativeLayout>

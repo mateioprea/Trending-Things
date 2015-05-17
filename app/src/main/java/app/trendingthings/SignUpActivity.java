@@ -58,6 +58,7 @@ public class SignUpActivity extends Activity {
                                 Toast.makeText(getApplicationContext(),currentUser.getUsername(),Toast.LENGTH_LONG).show();
                                 SaveUserToApp(currentUser);
                                 GoToArticles();
+                                finish();
                             } else {
                                 Toast.makeText(getApplicationContext(),
                                         "There was an error signing up."

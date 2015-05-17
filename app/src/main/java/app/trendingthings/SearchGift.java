@@ -29,6 +29,7 @@ public class SearchGift extends Activity {
 
     private List<ParseObject> giftCategories;
     private List<ParseObject> giftSearchResult;
+    private boolean debug;
 
     private String[] sexes = {"Masculin", "Feminim", "Unisex"};
 
@@ -92,18 +93,6 @@ public class SearchGift extends Activity {
                     }
                 }
             });
-
-            /*getGifts.countInBackground(new CountCallback() {
-                @Override
-                public void done(int i, ParseException e) {
-                    if(e == null) {
-                        Toast.makeText(getApplicationContext(), i + "", Toast.LENGTH_SHORT).show();
-                    }
-                    else{
-                        Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });*/
         }
     }
 
@@ -123,8 +112,9 @@ public class SearchGift extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 String objId = giftSearchResult.get(position).getObjectId();
-
-                Toast.makeText(getApplicationContext(),position + "", Toast.LENGTH_LONG).show();
+                if(debug) {
+                    Toast.makeText(getApplicationContext(), position + "", Toast.LENGTH_LONG).show();
+                }
                 Intent goToGiftView = new Intent(getApplicationContext(), ViewGift.class);
                 goToGiftView.putExtra(Constants.GiftId, objId);
                 startActivity(goToGiftView);
@@ -175,6 +165,8 @@ public class SearchGift extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_gift);
+
+        debug = ((MyApplication)getApplication()).debug;
 
         LoadCategories();
         LoadSex();

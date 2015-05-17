@@ -32,6 +32,7 @@ public class GroupView extends Activity {
 
     private ParseObject currentGroup;
     private String objId;
+    private boolean debug;
 
     private void LoadComments(){
         ParseRelation<ParseObject> comments =  currentGroup.getRelation(Constants.GropuRelationComments);
@@ -68,7 +69,9 @@ public class GroupView extends Activity {
             giftsInGroup.getQuery().countInBackground(new CountCallback() {
                 public void done(int i, ParseException e) {
                     if (e == null) {
-                        Toast.makeText(getApplicationContext(), "Cadouri in grup " + i, Toast.LENGTH_LONG).show();
+                        if(debug) {
+                            Toast.makeText(getApplicationContext(), "Cadouri in grup " + i, Toast.LENGTH_LONG).show();
+                        }
                     } else {
                         Toast.makeText(getApplicationContext(), "cad " + e.toString(), Toast.LENGTH_LONG).show();
                     }
@@ -138,7 +141,7 @@ public class GroupView extends Activity {
         @Override
         public void onClick(View v) {
             Intent GotoViewGifts = new Intent(getApplicationContext(),ViewGroupGifts.class);
-            GotoViewGifts.putExtra(Constants.viewGiftsGroupId, currentGroup.getObjectId());
+            GotoViewGifts.putExtra(Constants.ViewGiftsGroupId, currentGroup.getObjectId());
             startActivity(GotoViewGifts);
         }
     }
@@ -149,11 +152,15 @@ public class GroupView extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_view);
 
+        debug = ((MyApplication)getApplication()).debug;
+
         Intent startIntent = getIntent();
         if(startIntent != null){
             objId = startIntent.getStringExtra(Constants.GroupToView);
             LoadGroup(objId);
-            Toast.makeText(getApplicationContext(),objId,Toast.LENGTH_LONG).show();
+            if(debug) {
+                Toast.makeText(getApplicationContext(), objId, Toast.LENGTH_LONG).show();
+            }
         }
         ((Button)findViewById(R.id.viewGiftsBtn)).setOnClickListener(new ViewGiftsButtonClick());
         ((Button)findViewById(R.id.GroupViewAddCommentButton)).setOnClickListener(new AddCommentButtonClick());

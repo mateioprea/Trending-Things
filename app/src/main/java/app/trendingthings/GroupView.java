@@ -134,7 +134,14 @@ public class GroupView extends Activity {
             }
         }
     }
-
+    class ViewGiftsButtonClick implements View.OnClickListener{
+        @Override
+        public void onClick(View v) {
+            Intent GotoViewGifts = new Intent(getApplicationContext(),ViewGroupGifts.class);
+            GotoViewGifts.putExtra(Constants.viewGiftsGroupId, currentGroup.getObjectId());
+            startActivity(GotoViewGifts);
+        }
+    }
 
 
     @Override
@@ -148,7 +155,7 @@ public class GroupView extends Activity {
             LoadGroup(objId);
             Toast.makeText(getApplicationContext(),objId,Toast.LENGTH_LONG).show();
         }
-
+        ((Button)findViewById(R.id.viewGiftsBtn)).setOnClickListener(new ViewGiftsButtonClick());
         ((Button)findViewById(R.id.GroupViewAddCommentButton)).setOnClickListener(new AddCommentButtonClick());
 
         ((Button)findViewById(R.id.GroupViewAddNewUserButton)).setOnClickListener(new View.OnClickListener(){

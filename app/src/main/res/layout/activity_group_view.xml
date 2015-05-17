@@ -38,6 +38,12 @@
             android:text="@string/GroupViewAddUserInGroup"
             android:id="@+id/GroupViewAddNewUserButton" />
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/viewGifts"
+            android:id="@+id/viewGiftsBtn" />
+
         <ListView
             android:layout_width="match_parent"
             android:layout_height="360dp"

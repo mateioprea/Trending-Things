@@ -28,6 +28,7 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.ProgressCallback;
 import com.parse.SaveCallback;
 
 import java.io.ByteArrayOutputStream;
@@ -104,10 +105,9 @@ public class ListArticlesActivity extends Activity {
         public void onClick(View v) {
             ParseObject toSave = new ParseObject(Constants.GiftObject);
             ParseUser currentUser = ((MyApplication)getApplication()).currentUser;
+
             //salvare date pe gift
             toSave.put(Constants.GiftUser, currentUser.getUsername());
-
-            //toSave.put("Message","Test salvare obiect");
 
             EditText txt = (EditText)findViewById(R.id.GiftNameInput);
             toSave.put(Constants.GiftName, txt.getText().toString());
@@ -130,10 +130,12 @@ public class ListArticlesActivity extends Activity {
             toSave.put(Constants.GiftGeneralRating, 0.0);
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            if(stream.size() > 0) {
+            //if(stream.size() > 0) {
                 picBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            }
+            //}
+
             final byte[] byteArray = stream.toByteArray();
+
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
             ParseFile picture = new ParseFile(timeStamp + ".jpg", byteArray);
@@ -148,6 +150,14 @@ public class ListArticlesActivity extends Activity {
                         Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
                     }
                 }
+
+            },new ProgressCallback() {
+                @Override
+                public void done(Integer procentDone) {
+                    if (procentDone % 20 == 0){
+                        Toast.makeText(getApplicationContext(), "Upload progress: " + procentDone +"%", Toast.LENGTH_SHORT).show();
+                    }
+                }
             });
 
             toSave.put(Constants.GiftPicture, picture);
@@ -157,6 +167,7 @@ public class ListArticlesActivity extends Activity {
                 public void done(ParseException e) {
                     if(e == null){
                         Toast.makeText(getApplicationContext(),"Obiect salvat cu success",Toast.LENGTH_LONG).show();
+                        finish();
                     }
                     else{
                         Toast.makeText(getApplicationContext(),"Eroare : " + e.toString(),Toast.LENGTH_LONG).show();
@@ -260,10 +271,6 @@ public class ListArticlesActivity extends Activity {
 
         Button saveTest = (Button)findViewById(R.id.SaveObjectButton);
         saveTest.setOnClickListener(new SavePhoto());
-        //Button takeFromServer = (Button)findViewById(R.id.TakeFromServer);
-        //takeFromServer.setOnClickListener(new TakeFromServer());
-
-        //Toast.makeText(getApplicationContext(),"From Article List " + currentUser.getUsername(),Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -304,10 +311,6 @@ public class ListArticlesActivity extends Activity {
             Toast.makeText(getApplicationContext(),mCurrentPhotoPath,Toast.LENGTH_LONG).show();
             GalleryAddPic();
             SetPicture();
-            //Bundle extras = data.getExtras();
-            //Bitmap imageBitmap = (Bitmap)extras.get("data");
-            //ImageView resultPicture = (ImageView)findViewById(R.id.imageView);
-            //resultPicture.setImageBitmap(imageBitmap);
         }
 
 

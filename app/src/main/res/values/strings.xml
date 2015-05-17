@@ -49,4 +49,6 @@
     <string name="recommendToGroup">Recomanda in grup</string>
     <string name="backToSearch">Inapoi la cautare</string>
     <string name="chooseGroup">Alege group pentru cadou</string>
+    <string name="viewGifts">Vezi cadouri sugerate</string>
+    <string name="title_activity_view_group_gifts">ViewGroupGifts</string>
 </resources>

@@ -172,7 +172,7 @@ public class MyGroups extends Activity {
 
     private void PopulateGroupList(){
         List<ParseObject> groupsFromUser = currentUser.getList(Constants.UserGroups);
-        if(groupsFromUser != null) {
+        if(groupsFromUser != null && groupsFromUser.size() > 0) {
             if(debug) {
                 Toast.makeText(getApplicationContext(), "Grupuri de la user " + groupsFromUser.size(), Toast.LENGTH_LONG).show();
             }

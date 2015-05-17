@@ -123,7 +123,9 @@ public class ListArticlesActivity extends Activity {
             toSave.put(Constants.GiftGeneralRating, 0.0);
 
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            picBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            if(stream.size() > 0) {
+                picBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            }
             final byte[] byteArray = stream.toByteArray();
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
